@@ -3,138 +3,142 @@
 
 /* Reseting */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
 
 /* Navbar Styles */
-.navbar-nav { 
-    margin-left: auto; 
+.navbar-nav {
+  margin-left: auto;
 }
 
-.navbar-nav{
-    padding-left:30px;
-    padding-right:30px;
+.navbar-nav {
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
 
 /* Home Page Styles */
 .container {
-    max-width: 960px;
-  }
-  
-  .icon-link > .bi {
-    width: .75em;
-    height: .75em;
-  }
-  
-  /*
+  max-width: 960px;
+}
+
+.icon-link>.bi {
+  width: .75em;
+  height: .75em;
+}
+
+/*
    * Custom translucent site header
    */
-  
-  .site-header {
-    background-color: rgba(0, 0, 0, .85);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    backdrop-filter: saturate(180%) blur(20px);
-  }
-  .site-header a {
-    color: #8e8e8e;
-    transition: color .15s ease-in-out;
-  }
-  .site-header a:hover {
-    color: #fff;
-    text-decoration: none;
-  }
-  
-  /*
+
+.site-header {
+  background-color: rgba(0, 0, 0, .85);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+
+.site-header a {
+  color: #8e8e8e;
+  transition: color .15s ease-in-out;
+}
+
+.site-header a:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+/*
    * Dummy devices (replace them with your own or something else entirely!)
    */
-  
+
+.product-device {
+  position: absolute;
+  right: 10%;
+  bottom: -30%;
+  width: 300px;
+  height: 540px;
+  background-color: #333;
+  border-radius: 21px;
+  transform: rotate(30deg);
+}
+
+.product-device::before {
+  position: absolute;
+  top: 10%;
+  right: 10px;
+  bottom: 10%;
+  left: 10px;
+  content: "";
+  background-color: rgba(255, 255, 255, .1);
+  border-radius: 5px;
+}
+
+.product-device-2 {
+  top: -25%;
+  right: auto;
+  bottom: 0;
+  left: 5%;
+  background-color: #e5e5e5;
+}
+
+.disabled {
+  color: var(--bs-nav-link-disabled-color);
+  /* pointer-events:none; */
+  cursor: default;
+}
+
+.disabled:hover {
+  color: #121212;
+}
+
+/*
+   * Extra utilities
+   */
+
+.flex-equal>* {
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .flex-md-equal>* {
+    flex: 1;
+  }
+}
+
+/* No less than 400px, no greater than 900px */
+@media (min-width: 764px) and (max-width: 1225px) {
   .product-device {
     position: absolute;
     right: 10%;
     bottom: -30%;
-    width: 300px;
-    height: 540px;
+    width: 150px;
+    height: 350px;
     background-color: #333;
     border-radius: 21px;
     transform: rotate(30deg);
   }
-  
-  .product-device::before {
+
+  .product-device {
     position: absolute;
     top: 10%;
-    right: 10px;
+    right: 5px;
     bottom: 10%;
-    left: 10px;
+    left: 5px;
     content: "";
     background-color: rgba(255, 255, 255, .1);
     border-radius: 5px;
   }
-  
+
   .product-device-2 {
+    z-index: 1;
     top: -25%;
     right: auto;
     bottom: 0;
     left: 5%;
     background-color: #e5e5e5;
   }
-  
-  .disabled {
-    color: var(--bs-nav-link-disabled-color);
-    /* pointer-events:none; */
-    cursor:default;
-  }
-
-  .disabled:hover {
-    color: #121212;
-  }  
-
-  /*
-   * Extra utilities
-   */
-  
-  .flex-equal > * {
-    flex: 1;
-  }
-  @media (min-width: 768px) {
-    .flex-md-equal > * {
-      flex: 1;
-    }
-  }
-  /* No less than 400px, no greater than 900px */
-  @media (min-width:764px) and (max-width:1225px) {
-    .product-device {
-      position: absolute;
-      right: 10%;
-      bottom: -30%;
-      width: 150px;
-      height: 350px;
-      background-color: #333;
-      border-radius: 21px;
-      transform: rotate(30deg);
-    }
-
-    .product-device {
-      position: absolute;
-      top: 10%;
-      right: 5px;
-      bottom: 10%;
-      left: 5px;
-      content: "";
-      background-color: rgba(255, 255, 255, .1);
-      border-radius: 5px;
-    }
-    
-    .product-device-2 {
-      z-index: 1;
-      top: -25%;
-      right: auto;
-      bottom: 0;
-      left: 5%;
-      background-color: #e5e5e5;
-    }
-  }​ 
+}
