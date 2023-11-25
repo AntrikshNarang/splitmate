@@ -83,8 +83,16 @@
     background-color: #e5e5e5;
   }
   
-  
-  
+  .disabled {
+    color: var(--bs-nav-link-disabled-color);
+    /* pointer-events:none; */
+    cursor:default;
+  }
+
+  .disabled:hover {
+    color: #121212;
+  }  
+
   /*
    * Extra utilities
    */
