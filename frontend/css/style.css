@@ -102,3 +102,12 @@ body {
         padding: 40px 15px 15px 15px;
     }
 }
+
+.info-forgot {
+    font-weight: 600;
+    font-size: 1.2rem;
+    letter-spacing: 1.3px;
+    padding-left: 10px;
+    padding-bottom: 50px;
+    color: #555;
+}
