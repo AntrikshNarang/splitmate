@@ -1,1 +1,1 @@
-# Split Mate - An all in one Solution to your Expenses
+### SplitMate
