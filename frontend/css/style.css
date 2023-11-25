@@ -84,6 +84,7 @@
   }
   
   
+  
   /*
    * Extra utilities
    */
@@ -96,4 +97,36 @@
       flex: 1;
     }
   }
-  
+  /* No less than 400px, no greater than 900px */
+  @media (min-width:764px) and (max-width:1225px) {
+    .product-device {
+      position: absolute;
+      right: 10%;
+      bottom: -30%;
+      width: 150px;
+      height: 350px;
+      background-color: #333;
+      border-radius: 21px;
+      transform: rotate(30deg);
+    }
+
+    .product-device {
+      position: absolute;
+      top: 10%;
+      right: 5px;
+      bottom: 10%;
+      left: 5px;
+      content: "";
+      background-color: rgba(255, 255, 255, .1);
+      border-radius: 5px;
+    }
+    
+    .product-device-2 {
+      z-index: 1;
+      top: -25%;
+      right: auto;
+      bottom: 0;
+      left: 5%;
+      background-color: #e5e5e5;
+    }
+  }​ 
