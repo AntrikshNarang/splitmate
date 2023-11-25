@@ -10,8 +10,19 @@
 }
 
 body {
-    background: #ecf0f3;
+    /* background: #ecf0f3; */
 }
+
+/* Navbar Styles */
+.navbar-nav {
+    margin-left: auto;
+  }
+  
+  .navbar-nav {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  
 
 .wrapper {
     max-width: 350px;
