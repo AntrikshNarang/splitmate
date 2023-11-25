@@ -152,9 +152,10 @@
   font-size: 1rem;
   margin: 1rem 0 2rem;
   margin-right: 1rem;
-  padding: 0.50rem 1rem;
+  padding: 0.4rem 1rem;
   display: inline-block;
-  background-color: #f8f9fa;
+  background-color: #f8f9fa;  
+  
 }
 
 @media (max-width: 467px) {
