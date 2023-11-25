@@ -142,3 +142,29 @@
     background-color: #e5e5e5;
   }
 }
+
+.infoAll {
+  display: inline;
+}
+
+.infoBox {
+  border-color: #f8f9fa;
+  font-size: 1rem;
+  margin: 1rem 0 2rem;
+  margin-right: 1rem;
+  padding: 0.50rem 1rem;
+  display: inline-block;
+  background-color: #f8f9fa;
+}
+
+@media (max-width: 467px) {
+  .infoBox {
+    border-color: #f8f9fa;
+    font-size: 0.7rem;
+    margin: 1rem 0 rem;
+    margin-right: 1rem;
+    padding: 0.2rem 0.4rem;
+    display: inline-block;
+    background-color: #f8f9fa;
+  }
+}
