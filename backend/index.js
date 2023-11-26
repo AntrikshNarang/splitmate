@@ -16,6 +16,6 @@ app.use(express.json())
 app.use('/api/auth',require('./routes/User.js'));
 // app.use('/api/items',require('./routes/Items.js'));
 
-app.listen(port,()=>{
+app.listen(port || 3000 ,()=>{
     console.log(`Listening on the Port ${port}`)
 })
