@@ -7,40 +7,27 @@
   const thisWeekData = [1245, 1500, 1350, 2040, 2348, 1305, 2212];
   const prevWeekData = [1850, 2250, 1203, 850, 1550, 2590, 3500];
 
+  const xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+const yValues = [55, 49, 44, 24, 15];
+const barColors = ["red", "green","blue","orange","brown"];
   // Graphs
   const ctx = document.getElementById('myChart');
   // eslint-disable-next-line no-unused-vars
   const myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday'
-      ],
-      datasets: [{
-        data: thisWeekData,
-        lineTension: 0,
-        backgroundColor: 'transparent',
-        borderColor: '#007bff',
-        borderWidth: 4,
-        pointBackgroundColor: '#007bff'
-      }]
-    },
-    options: {
-      plugins: {
-        legend: {
-          display: false
-        },
-        tooltip: {
-          boxPadding: 3
-        }
-      }
+    type: "doughnut",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: "World Wide Wine Production"
     }
+  }
   });
 
   // Function to update chart data based on the selected week
