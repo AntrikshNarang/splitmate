@@ -17,6 +17,6 @@ app.use('/api/auth',require('./routes/User.js'));
 app.use('/api/friends',require('./routes/Friends.js'));
 app.use('/api/money',require('./routes/Transactions.js'));
 
-app.listen(port,()=>{
+app.listen(port || 3000 ,()=>{
     console.log(`Listening on the Port ${port}`)
 })
