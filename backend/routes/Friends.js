@@ -14,14 +14,17 @@ router.post('/addFriend/:id', fetchuser , async (req, res) => {
         if (!friend) {
             return res.status(400).json({success, error: 'User Not Found on DB' })
         }
-        
+        if(friend.pendingRequests.findIndex((id) => id == req.user.id) !== -1){
+            return res.status(400).json({success, error: 'A request is already sent to the user'});
+        }
         friend = await User.findByIdAndUpdate(friendId, {pendingRequests: [...friend.pendingRequests, req.user.id]});
-    
+        
+        console.log(friend)
         success=true;
-        res.status(200).json({success,authToken});
+        res.status(200).json({success, friend});
     } catch (error) {
         console.log(error.message);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({success: false, error: 'Internal Server Error'});
     }
 })
 
@@ -38,58 +41,41 @@ router.post('/acceptfriend/:id', fetchuser , async (req, res) => {
             return res.status(400).json({success, error: 'User Not Found on DB' })
         }
         
-        friend = await User.findByIdAndUpdate(friendId, {friends: [...friend.friends, req.user.id]});
         let currentUser = await User.findById(req.user.id);
-        currentUser = await User.findByIdAndUpdate(req.user.id, {pendingRequests: currentUser.pendingRequests.filter((req) => req.id != friendId)});
+        if(currentUser.friends.findIndex((id) => id == friendId) !== -1){
+            return res.status(400).json({success, error: 'User is already a friend'});
+        }
+        friend = await User.findByIdAndUpdate(friendId, {friends: [...friend.friends, req.user.id]});
+        currentUser = await User.findByIdAndUpdate(req.user.id, {pendingRequests: currentUser.pendingRequests.filter((prId) => prId != friendId), friends: [...currentUser.friends, friendId]});
         success=true;
-        res.status(200).json({success,authToken});
+        res.status(200).json({success, currentUser, friend});
     } catch (error) {
         console.log(error.message);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({success: false, error: 'Internal Server Error'});
     }
 })
 
-
-
-//ROUTE 2: Authenticate a User with login credentials using: POST "/api/auth/login". Doesn't require login
-router.post('/login', [
-    body('email', 'Enter a valid E-mail').isEmail(),
-    body('password', 'Password can not be blank').exists()
-], async (req, res) => {
-    console.log(req.body);
-    let success = false;
-    //If an Error is Found, return bad Request
-    const errors = validationResult(req);
-    console.log(errors.array());
-    if (!errors.isEmpty()) {
-        return res.status(400).json({success, errors: errors.array()[0].msg });
-    }
-    const {email,password} = req.body;
-    try{
-        let user = await User.findOne({email});
-        if(!user){
-            return res.status(400).json({success,error:'Please try to login with correct credentials'})
-        }
-
-        const passwordCompare = await bcrypt.compare(password,user.password);
-        if(!passwordCompare){
-            return res.status(400).json({success,error:'Please try to login with correct credentials'})
-        }
-
-        const data = {
-            user:{
-                id: user.id
+router.get('/getfriends', fetchuser, async (req, res) => {
+    try {
+        let userId = req.user.id;
+        let user = await User.findById(userId);
+        let friendList = [];
+        await Promise.all(user.friends.map(async (friendId, index) =>{
+            try{
+                let friend = await User.findById(friendId);
+                friendList.push({id: friendId, name: friend.name});
+            } catch(err){
+                console.log(`Cannot find friend with id ${friend}`)
+                console.log(err.message) 
             }
-        }
-        const authToken = jwt.sign(data,JWT_SECRET);
-        success = true;
-        console.log('user login successsful')
-        res.status(200).json({success, authToken});
-          
-    } catch(error){
+        }))
+        return res.status(200).json({success: true, friendList});
+
+    } catch (error) {
         console.log(error.message);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({success: false, error: 'Internal Server Error'});
     }
 })
+
 
 module.exports = router;
