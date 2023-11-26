@@ -43,24 +43,25 @@
         <div class="text-center mt-4 name">
             Register
         </div>
-        <form class="p-3 mt-3">
+        <form onsubmit="submitForm(event)" class="p-3 mt-3">
             <div class="form-field d-flex align-items-center">
                 <span class="fas fa-user"></span>
-                <input type="text" name="name" id="pwd" placeholder="Name" required>
+                <input type="text" name="name" id="username" placeholder="Name" required autofocus>
             </div>
             <div class="form-field d-flex align-items-center">
                 <span class="fas fa-envelope"></span>
-                <input type="email" name="email" id="useremail" placeholder="Email" required autofocus>
+                <input type="email" name="email" id="useremail" placeholder="Email" required>
             </div>
             <div class="form-field d-flex align-items-center">
                 <span class="fas fa-key"></span>
-                <input type="password" name="password" id="pwd" placeholder="Password" required>
+                <input type="password" name="password" id="password" placeholder="Password" required>
             </div>
             <div class="form-field d-flex align-items-center">
                 <span class="fas fa-circle-check"></span>
-                <input type="password" name="cpassword" id="pwd" placeholder="Confirm Password" required>
+                <input type="password" name="cpassword" id="cpassword" placeholder="Confirm Password" required>
             </div>
-            <button type="submit" class="btn mt-3">Login</button>
+            <div id="errorDiv" class="text-danger"></div>
+            <button type="submit" class="btn mt-3">Register</button>
         </form>
         <!-- <div class="text-center fs-6">
             <a href="./forgotPassword/forgotPass.html">Forget password?</a> or <a href="./register/register.html">Sign up</a>
@@ -69,6 +70,44 @@
             Have an Account ? <a href="login.html">Login Here</a>
         </div>
     </div>
+
+    <script>
+        function makeError(str){
+            let errorDiv = document.getElementById('errorDiv');
+            errorDiv.innerHTML = null;
+            errorDiv.innerHTML = str;
+        }
+        async function submitForm(e){
+            e.preventDefault();
+            let username = document.getElementById('username').value;
+            let useremail = document.getElementById('useremail').value;
+            let password = document.getElementById('password').value;
+            let cpassword = document.getElementById('cpassword').value;
+
+            if(password != cpassword){
+                makeError("Password do not Match");
+                return;
+            }
+
+            let response = await fetch("http://localhost:3000/api/auth/createuser",{
+                method: "POST",
+                headers: {
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({name: username, email: useremail, password})
+            })
+            let json = await response.json();
+            console.log(json);
+            if(json.success == true){
+                console.log('Logged in Successfully');
+                localStorage.setItem('token', json.authToken);
+                window.location.href = "dashboard.html";
+            }
+            else{
+                makeError(json.error);
+            }
+        }
+    </script>
 
     <script src="https://kit.fontawesome.com/5f14bf26fd.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

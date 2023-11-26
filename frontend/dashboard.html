@@ -91,176 +91,15 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Transaction ID</th>
-          <th scope="col">Type</th>
-          <th scope="col">Date</th>
-          <th scope="col">Description</th>
+          <th scope="col">Name</th>
           <th scope="col">Amount</th>
-          <th scope="col">Payer</th>
-          <th scope="col">Participants</th>
+          <th scope="col">Type</th>
+          <th scope="col">Category</th>
+          <th scope="col">Date</th>
+          <th scope="col">Payers</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>1210</td>
-          <td>Expense</td>
-          <td>placeholder</td>
-          <td>text</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>1210</td>
-          <td>Expense</td>
-          <td>visual</td>
-          <td>layout</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>1210</td>
-          <td>Expense</td>
-          <td>dashboard</td>
-          <td>tabular</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>1210</td>
-          <td>Income</td>
-          <td>illustrative</td>
-          <td>data</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>1210</td>
-          <td>Expense</td>
-          <td>layout</td>
-          <td>dashboard</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>1210</td>
-          <td>Expense</td>
-          <td>text</td>
-          <td>placeholder</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>6</td>
-          <td>1210</td>
-          <td>Expense</td>
-          <td>rich</td>
-          <td>data</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>7</td>
-          <td>1210</td>
-          <td>Income</td>
-          <td>information</td>
-          <td>irrelevant</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>8</td>
-          <td>1210</td>
-          <td>Expense</td>
-          <td>placeholder</td>
-          <td>text</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>9</td>
-          <td>1210</td>
-          <td>Expense</td>
-          <td>visual</td>
-          <td>layout</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>10</td>
-          <td>1210</td>
-          <td>Expense</td>
-          <td>dashboard</td>
-          <td>tabular</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>11</td>
-          <td>1210</td>
-          <td>Expense</td>
-          <td>illustrative</td>
-          <td>data</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>12</td>
-          <td>1210</td>
-          <td>Income</td>
-          <td>layout</td>
-          <td>dashboard</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>13</td>
-          <td>1210</td>
-          <td>Income</td>
-          <td>text</td>
-          <td>visual</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>14</td>
-          <td>1210</td>
-          <td>Expense</td>
-          <td>rich</td>
-          <td>data</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
-        <tr>
-          <td>15</td>
-          <td>1210</td>
-          <td>Expense</td>
-          <td>information</td>
-          <td>text</td>
-          <td>data</td>
-          <td>placeholder</td>
-          <td>text</td>
-        </tr>
+      <tbody id="table-body">
       </tbody>
     </table>
   </div>
@@ -333,6 +172,50 @@
     </div>
   </div>
 </footer>
+
+<script>
+  function setData(data){
+    console.log(data);
+    let parent = document.getElementById('table-body');
+    data.map((tr, index) => {
+      let child = document.createElement('tr');
+      let num = document.createElement('td');
+      num.textContent=index + 1;
+      child.appendChild(num);
+      let name = document.createElement('td');
+      name.textContent=tr.name;
+      child.appendChild(name);
+      let amount = document.createElement('td');
+      amount.textContent=tr.amount;
+      child.appendChild(amount);
+      let type = document.createElement('td');
+      type.textContent=tr.amount >= 0 ? 'Credit':'Expense';
+      child.appendChild(type);
+      let category = document.createElement('td');
+      category.textContent=tr.category;
+      child.appendChild(category);
+      let date = document.createElement('td');
+      date.textContent= new Date(tr.date).toLocaleString();
+      child.appendChild(date);
+      let split = document.createElement('td');
+      split.textContent= tr.payers.length > 0 ? 'Group' : 'Individual';
+      child.appendChild(split);
+      parent.appendChild(child)
+    })
+  }
+  async function getData(){
+    let response = await fetch("http://localhost:3000/api/money/gettransactions",{
+      method: "GET",
+      headers: {
+        "content-type": "application-json",
+        "auth-token": localStorage.getItem('token')
+      }
+    })
+    let result = await response.json();
+    setData(result.transactions)
+  }
+  getData();
+</script>
 
 <script src="https://kit.fontawesome.com/5f14bf26fd.js" crossorigin="anonymous"></script>
 
