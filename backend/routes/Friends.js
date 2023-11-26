@@ -10,6 +10,10 @@ router.post('/addFriend/:id', fetchuser , async (req, res) => {
     //Check whether email exists already
     try {
         let success = false;
+        let user = await User.findById(req.user.id);
+        if(user.friends.findIndex((id) => friendId == id) != -1){
+            return res.status(400).json({success, error: 'User is already your friend'});
+        }
         let friend = await User.findOne({ _id: friendId });
         if (!friend) {
             return res.status(400).json({success, error: 'User Not Found on DB' })
@@ -60,7 +64,7 @@ router.get('/getfriends', fetchuser, async (req, res) => {
         let userId = req.user.id;
         let user = await User.findById(userId);
         let friendList = [];
-        await Promise.all(user.friends.map(async (friendId, index) =>{
+        await Promise.all(user.friends.map(async (friendId) =>{
             try{
                 let friend = await User.findById(friendId);
                 friendList.push({id: friendId, name: friend.name});
@@ -76,6 +80,42 @@ router.get('/getfriends', fetchuser, async (req, res) => {
         res.status(500).json({success: false, error: 'Internal Server Error'});
     }
 })
+
+router.get('/getfriendrequests', fetchuser, async (req, res) => {
+    try {
+        let userId = req.user.id;
+        let user = await User.findById(userId);
+        let friendList = [];
+        await Promise.all(user.pendingRequests.map(async (friendId) =>{
+            try{
+                let friend = await User.findById(friendId);
+                friendList.push({id: friendId, name: friend.name});
+            } catch(err){
+                console.log(`Cannot find friend with id ${friend}`)
+                console.log(err.message) 
+            }
+        }))
+        return res.status(200).json({success: true, friendList});
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({success: false, error: 'Internal Server Error'});
+    }
+})
+
+router.get('/search/:query', fetchuser, async (req, res) => {
+    try {
+        let searchQuery = req.params.query;
+        let results = await User.find({$text: {$search: searchQuery}});
+        results = results.map((result) => ({name: result.name, email: result.email, id: result._id}))
+        return res.status(200).json({success: true, results});
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({success: false, error: 'Internal Server Error'});
+    }
+})
+
 
 
 module.exports = router;

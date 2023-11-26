@@ -42,23 +42,23 @@
 
   <!-- Adding expense, View Income, Expenses -->
 
-  <button type="submit" class="btn btn-primary me-3">Add an expense</button>
+  <button type="button" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add an expense</button>
 
   <div class="infoAll">
 
     <div class="infoBox">
       <span>Income</span>
-      <span class="income">$40K</span>
+      <span class="income" id="income"></span>
     </div>
 
     <div class="infoBox">
       <span>Expense</span>
-      <span class="expense">$12K</span>
+      <span class="expense" id="expense"></span>
     </div>
 
     <div class="infoBox">
       <span>Total</span>
-      <span class="total">$28K</span>
+      <span class="total" id="total"></span>
     </div>
   </div>
 
@@ -172,10 +172,89 @@
     </div>
   </div>
 </footer>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form class="modal-content" onsubmit="addExpense(event)">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="exampleName" class="form-label">Name</label>
+          <input type="text" class="form-control" id="exampleName" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="exampleDescription" class="form-label">Description</label>
+          <input type="text" class="form-control" id="exampleDescription" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="exampleAmount" class="form-label">Amount</label>
+          <input type="number" class="form-control" id="exampleAmount" aria-describedby="emailHelp" min="0">
+        </div>
+        <select class="form-select form-select" id="exampleCategory" aria-label=".form-select-sm example">
+          <option selected>Select Category</option>
+          <option value="education">education</option>
+          <option value="salary">salary</option>
+          <option value="food">food</option>
+          <option value="travel">travel</option>
+          <option value="bills">bills</option>
+          <option value="rent">rent</option>
+          <option value="refund">refund</option>
+          <option value="entertainment">entertainment</option>
+          <option value="other">other</option>
+        </select>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="expenseRadio" checked>
+          <label class="form-check-label" for="expenseRadio">
+            Expense
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="incomeRadio">
+          <label class="form-check-label" for="incomeRadio">
+            Income
+          </label>
+        </div>
+      </div>
+      <div id="errorDiv" class="text-danger"></div>
+      <div class="modal-footer">
+        <button type="button" id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit"  class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <script>
+  let trData = null;
+  function makeError(str){
+            let errorDiv = document.getElementById('errorDiv');
+            errorDiv.innerHTML = null;
+            errorDiv.innerHTML = str;
+        }
   function setData(data){
-    console.log(data);
+    // Total Expenses
+    let income = document.getElementById('income');
+    let expense = document.getElementById('expense');
+    let total = document.getElementById('total');
+    let incomeAmount = 0;
+    let expenseAmount = 0;
+    let totalAmount = 0;
+    for(let i = 0; i < data.length; i++){
+      if(data[i].amount >= 0){
+        incomeAmount += data[i].amount;
+      }
+      else{
+        expenseAmount += data[i].amount;
+      }
+    }
+    totalAmount = incomeAmount + expenseAmount;
+    income.textContent = "₹ " + incomeAmount;
+    expense.textContent = "₹ " + expenseAmount * -1;
+    total.textContent = "₹ " + totalAmount;
+
+    // Table Data
     let parent = document.getElementById('table-body');
     data.map((tr, index) => {
       let child = document.createElement('tr');
@@ -213,8 +292,38 @@
     })
     let result = await response.json();
     setData(result.transactions)
+    trData = result.transactions;
   }
   getData();
+  async function addExpense(e){
+    e.preventDefault();
+    let name = document.getElementById('exampleName').value;
+    let description = document.getElementById('exampleDescription').value;
+    let amount = document.getElementById('exampleAmount').value;
+    let category = document.getElementById('exampleCategory').value;
+    let expenseType = document.getElementById('expenseRadio').checked ? -1 : 1;
+
+    if(name.length == 0 || description.length == 0 || amount.length == 0 || category == 'Select Category'){
+      makeError("Select All Fields");
+      return;
+    }
+    let result = await fetch("http://localhost:3000/api/money/createtransaction", {
+      method: 'POST',
+      headers:{
+        'content-type': 'application/json',
+        'auth-Token': localStorage.getItem('token')
+      },
+      body: JSON.stringify({name, description, category, amount: amount * expenseType})
+    })
+    let data = await result.json();
+    if(data.success == true){
+      document.getElementById('closeBtn').click();
+      window.location.href = "";
+    }
+    else{
+      makeError(data.error);
+    }
+  }
 </script>
 
 <script src="https://kit.fontawesome.com/5f14bf26fd.js" crossorigin="anonymous"></script>

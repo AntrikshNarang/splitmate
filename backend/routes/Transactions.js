@@ -31,7 +31,7 @@ router.get('/gettransactions', fetchuser , async (req, res) => {
     //If an Error is Found, return bad Request
     //Check whether email exists already
     try {
-        let transactions = await Transaction.find({creator: req.user.id}); 
+        let transactions = await Transaction.find({creator: req.user.id}).sort({date: -1}); 
         success=true;
         return res.status(200).json({success, transactions});
     } catch (error) {

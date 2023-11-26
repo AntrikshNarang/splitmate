@@ -3,7 +3,8 @@ const router = express.Router();
 const User = require('../Models/User')
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const fetchuser = require('../middleware/fetchuser');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 
@@ -48,7 +49,7 @@ router.post('/createuser', [
         res.status(200).json({success,authToken});
     } catch (error) {
         console.log(error.message);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({success: false, error: 'Internal Server Error'});
     }
 })
 
@@ -89,7 +90,17 @@ router.post('/login', [
           
     } catch(error){
         console.log(error.message);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({success: false, error: 'Internal Server Error'});
+    }
+})
+
+router.get('/messages', fetchuser, async(req, res) => {
+    try {
+        let user = await User.findById(req.user.id);
+        return res.status(200).json({success: true,messages: user.messages});
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({success: false, error: 'Internal Server Error'});
     }
 })
 
