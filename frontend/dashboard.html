@@ -62,19 +62,22 @@
     </div>
   </div>
 
-
-
-
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Dashboard</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group me-2">
-        <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+        <button id="share" type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+        <button id="export" type="button" class="btn btn-sm btn-outline-secondary">Export</button>
       </div>
-      <button type="button" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1">
-        This week
-      </button>
+      <div class="btn-group">
+        <button id="week" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle"
+          data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          This week
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#" id="otherWeekOption">Other week</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -88,123 +91,174 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Header</th>
-          <th scope="col">Header</th>
-          <th scope="col">Header</th>
-          <th scope="col">Header</th>
+          <th scope="col">Transaction ID</th>
+          <th scope="col">Type</th>
+          <th scope="col">Date</th>
+          <th scope="col">Description</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Payer</th>
+          <th scope="col">Participants</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>1</td>
-          <td>random</td>
+          <td>1210</td>
+          <td>Expense</td>
+          <td>placeholder</td>
+          <td>text</td>
           <td>data</td>
           <td>placeholder</td>
           <td>text</td>
         </tr>
         <tr>
           <td>2</td>
-          <td>placeholder</td>
-          <td>irrelevant</td>
+          <td>1210</td>
+          <td>Expense</td>
           <td>visual</td>
           <td>layout</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>3</td>
-          <td>data</td>
-          <td>rich</td>
+          <td>1210</td>
+          <td>Expense</td>
           <td>dashboard</td>
           <td>tabular</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>3</td>
-          <td>information</td>
-          <td>placeholder</td>
+          <td>1210</td>
+          <td>Income</td>
           <td>illustrative</td>
           <td>data</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>4</td>
-          <td>text</td>
-          <td>random</td>
+          <td>1210</td>
+          <td>Expense</td>
           <td>layout</td>
           <td>dashboard</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>5</td>
-          <td>dashboard</td>
-          <td>irrelevant</td>
+          <td>1210</td>
+          <td>Expense</td>
           <td>text</td>
           <td>placeholder</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>6</td>
-          <td>dashboard</td>
-          <td>illustrative</td>
+          <td>1210</td>
+          <td>Expense</td>
           <td>rich</td>
           <td>data</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>7</td>
-          <td>placeholder</td>
-          <td>tabular</td>
+          <td>1210</td>
+          <td>Income</td>
           <td>information</td>
           <td>irrelevant</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>8</td>
-          <td>random</td>
+          <td>1210</td>
+          <td>Expense</td>
+          <td>placeholder</td>
+          <td>text</td>
           <td>data</td>
           <td>placeholder</td>
           <td>text</td>
         </tr>
         <tr>
           <td>9</td>
-          <td>placeholder</td>
-          <td>irrelevant</td>
+          <td>1210</td>
+          <td>Expense</td>
           <td>visual</td>
           <td>layout</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>10</td>
-          <td>data</td>
-          <td>rich</td>
+          <td>1210</td>
+          <td>Expense</td>
           <td>dashboard</td>
           <td>tabular</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>11</td>
-          <td>information</td>
-          <td>placeholder</td>
+          <td>1210</td>
+          <td>Expense</td>
           <td>illustrative</td>
           <td>data</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>12</td>
-          <td>text</td>
-          <td>placeholder</td>
+          <td>1210</td>
+          <td>Income</td>
           <td>layout</td>
           <td>dashboard</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>13</td>
-          <td>dashboard</td>
-          <td>irrelevant</td>
+          <td>1210</td>
+          <td>Income</td>
           <td>text</td>
           <td>visual</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>14</td>
-          <td>dashboard</td>
-          <td>illustrative</td>
+          <td>1210</td>
+          <td>Expense</td>
           <td>rich</td>
           <td>data</td>
+          <td>data</td>
+          <td>placeholder</td>
+          <td>text</td>
         </tr>
         <tr>
           <td>15</td>
-          <td>random</td>
-          <td>tabular</td>
+          <td>1210</td>
+          <td>Expense</td>
           <td>information</td>
+          <td>text</td>
+          <td>data</td>
+          <td>placeholder</td>
           <td>text</td>
         </tr>
       </tbody>
@@ -290,6 +344,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"
   integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
 
 <script src="js/dashboard.js"></script>
 
