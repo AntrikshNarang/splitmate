@@ -169,3 +169,17 @@
     background-color: #f8f9fa;
   }
 }
+
+/* Dotted and grey-coloured tiny horizontal rule (it's beautiful hr) */
+hr {
+  margin: auto;
+  border-color: grey;
+  border-style: dotted none none;
+  border-width: 10px;
+  width: 5%; 
+}
+
+/* To create a hover effect  */
+hr:hover {
+    border-color: black;
+}
