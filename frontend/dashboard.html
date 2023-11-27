@@ -234,6 +234,25 @@
     </form>
   </div>
 </div>
+<button id="buttonModal2" type="button" style="display: none;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+  Launch demo modal
+</button>
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form onsubmit="splitExpense(event)" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="modal-body2" class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Split Transaction</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <script>
   let trData = null;
@@ -267,6 +286,8 @@
     let parent = document.getElementById('table-body');
     data.map((tr, index) => {
       let child = document.createElement('tr');
+      child.style.cursor='pointer';
+      child.onclick = () => openExpenseDetails(tr);
       let num = document.createElement('td');
       num.textContent = index + 1;
       child.appendChild(num);
@@ -332,6 +353,112 @@
     else {
       makeError(data.error);
     }
+  }
+  let splitFriendArray = [];
+  let trAmount = 0;
+  async function openExpenseDetails(tr){
+    let btn = document.getElementById('buttonModal2');
+    trAmount = tr.amount;
+    console.log(tr)
+    btn.click();
+    let parent = document.getElementById('modal-body2')
+    if(tr.amount > 0) {
+      parent.innerHTML='<p class="text-danger">Cannot Add split for an income</p>'
+      return;
+    }
+    let name = document.createElement('div')
+    name.textContent = `Name: ${tr.name}`
+    parent.appendChild(name);
+    let amount = document.createElement('div')
+    amount.textContent = `Amount: ${tr.amount}`
+    parent.appendChild(amount);
+    let noOfFriends = await getFriends();
+    if(noOfFriends == 0) return;
+    let splitfrndsHead = document.createElement('h5');
+    splitfrndsHead.textContent="Split with following people"
+    parent.appendChild(splitfrndsHead);
+    let splitfriendDiv = document.createElement('div');
+    splitfriendDiv.classList.add('splitFriendDiv')
+    parent.appendChild(splitfriendDiv)
+    updateSplitArray();
+    
+  }
+  function updateSplitArray(){
+    let parent = document.getElementsByClassName('splitFriendDiv')[0];
+    // console.log(parent)
+    parent.innerHTML = ""
+    for(friend of splitFriendArray){
+      let friendName = document.createElement('div')
+      friendName.onclick = () => removeFriendforSplit(friend);
+      friendName.textContent = `${friend.name}`
+      parent.appendChild(friendName);
+      let splitInput = document.createElement('input');
+      splitInput.type = "number";
+      splitInput.disabled = true;
+      splitInput.classList.add('splitInput')
+      splitInput.placeholder = `Enter amount for ${friend.name}`;
+      splitInput.min = 0;
+      parent.appendChild(splitInput)
+    }
+    // console.log(splitFriendArray)
+    if(splitFriendArray.length > 0){
+      let btn1 = document.createElement('button')
+      btn1.classList.add('btn');
+      btn1.classList.add('btn-sm');
+      btn1.classList.add('btn-primary');
+      btn1.classList.add('btn-split');
+      btn1.textContent = "Split Equally";
+      btn1.onclick = function splitEqually(){
+      let equalAmt = -1 *  Math.floor(trAmount/(splitFriendArray.length + 1));
+      let inputs = document.getElementsByClassName('splitInput');
+      Array.from(inputs).forEach((input) =>{
+        input.value = equalAmt;
+      })
+    }
+      parent.appendChild(btn1)
+    }
+  }
+  async function getFriends(){
+    let result = await fetch("http://localhost:3000/api/friends/getfriends", {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': localStorage.getItem('token')
+      }
+    })
+    let data = await result.json();
+    let parent = document.getElementById('modal-body2');
+    let frndsHead = document.createElement('h5');
+    frndsHead.textContent="Friends List"
+    parent.appendChild(frndsHead);
+    noOfFriends = data.friendList.length;
+    for(let friend of data.friendList){
+      let frnd = document.createElement('div');
+      frnd.classList.add('mb-1')
+      frnd.classList.add('friends');
+      frnd.onclick = () => addFriendforSplit(friend);
+      frnd.textContent = friend.name;
+      parent.appendChild(frnd);
+    }
+    if(data.friendList.length == 0){
+      parent.innerHTML = `<h6 class="text-danger">Add friends to be able to split expenses. </h6>`;
+    }
+    return data.friendList.length;
+  }
+  function addFriendforSplit(friend){
+    if(splitFriendArray.findIndex((frd) => frd == friend) != -1){
+      console.log('friend already for split');
+      return;
+    }
+    splitFriendArray.push(friend);
+    updateSplitArray();
+  }
+  function removeFriendforSplit(friend){
+    splitFriendArray = splitFriendArray.filter((frd) => frd != friend);
+    updateSplitArray();
+  }
+  async function splitExpense(e){
+    e.preventDefault();
   }
 </script>
 
