@@ -111,6 +111,8 @@
       </tbody>
     </table>
   </div>
+  <h2 id="activity">Pending Splits</h2>
+  <div id="pendingSplit"></div>
 </main>
 
 <!-- Footer -->
@@ -247,7 +249,7 @@
       <div id="modal-body2" class="modal-body">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id="close2" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Split Transaction</button>
       </div>
     </form>
@@ -356,12 +358,15 @@
   }
   let splitFriendArray = [];
   let trAmount = 0;
+  let trans;
   async function openExpenseDetails(tr){
     let btn = document.getElementById('buttonModal2');
     trAmount = tr.amount;
     console.log(tr)
+    trans = tr;
     btn.click();
     let parent = document.getElementById('modal-body2')
+    parent.innerHTML = "";
     if(tr.amount > 0) {
       parent.innerHTML='<p class="text-danger">Cannot Add split for an income</p>'
       return;
@@ -390,7 +395,7 @@
     for(friend of splitFriendArray){
       let friendName = document.createElement('div')
       friendName.onclick = () => removeFriendforSplit(friend);
-      friendName.textContent = `${friend.name}`
+      friendName.textContent = `${friend.name} (Click to remove)`
       parent.appendChild(friendName);
       let splitInput = document.createElement('input');
       splitInput.type = "number";
@@ -408,6 +413,7 @@
       btn1.classList.add('btn-primary');
       btn1.classList.add('btn-split');
       btn1.textContent = "Split Equally";
+      btn1.type = "button";
       btn1.onclick = function splitEqually(){
       let equalAmt = -1 *  Math.floor(trAmount/(splitFriendArray.length + 1));
       let inputs = document.getElementsByClassName('splitInput');
@@ -437,7 +443,7 @@
       frnd.classList.add('mb-1')
       frnd.classList.add('friends');
       frnd.onclick = () => addFriendforSplit(friend);
-      frnd.textContent = friend.name;
+      frnd.textContent = friend.name + '(Click to add)';
       parent.appendChild(frnd);
     }
     if(data.friendList.length == 0){
@@ -459,7 +465,68 @@
   }
   async function splitExpense(e){
     e.preventDefault();
+    let equalAmt = -1 *  Math.floor(trAmount/(splitFriendArray.length + 1));
+      let inputs = document.getElementsByClassName('splitInput');
+      Array.from(inputs).forEach((input) =>{
+        input.value = equalAmt;
+      })
+    let result = await fetch('https://splitmate.onrender.com/api/money/splittransaction/'+trans._id, {
+      method: 'POST',
+      headers:{
+        'content-type':'application/json',
+        'auth-token': localStorage.getItem('token')
+      },
+      body: JSON.stringify({friends: splitFriendArray.map((fr) => fr.id), amounts: splitFriendArray.map(() => equalAmt)})
+    })
+    let data = await result.json();
+    console.log(data);
+    if(data.success){
+      let closeBtn = document.getElementById('close2');
+      closeBtn.click();
+    }
   }
+  async function getPendingRequests(){
+    let result = await fetch('https://splitmate.onrender.com/api/money/getpendingtransactions/', {
+      method: 'GET',
+      headers:{
+        'content-type':'application/json',
+        'auth-token': localStorage.getItem('token')
+      },
+    })
+    let data = await result.json();
+    console.log(data);
+    let parent = document.getElementById('pendingSplit');
+    for(pending of data.results){
+      let child = document.createElement('div');
+      child.innerHTML = `Name: <p class="text-secondary mb-0">${pending.name}</p>Amount: <p class="text-secondary mb-0">${pending.amount}</p>`
+      let btn = document.createElement('button')
+      btn.classList.add('btn')
+      btn.classList.add('btn-sm')
+      btn.classList.add('btn-primary')
+      btn.onclick = () => paysplit(pending.id);
+      btn.textContent = "Pay";
+      child.appendChild(btn)
+      parent.appendChild(child)
+    }
+    if(data.results.length == 0){
+      parent.innerHTML = '<p class="text-secondary">No Splits pending</p>'
+    }
+  }
+  async function paysplit(id){
+    let result = await fetch('https://splitmate.onrender.com/api/money/paymoney/' + id, {
+      method: 'POST',
+      headers:{
+        'content-type':'application/json',
+        'auth-token': localStorage.getItem('token')
+      },
+    })
+    let data = await result.json();
+    console.log(data);
+    if(data.success == true){
+      window.location.href = "";
+    }
+  }
+  getPendingRequests();
 </script>
 
 <script src="https://kit.fontawesome.com/5f14bf26fd.js" crossorigin="anonymous"></script>

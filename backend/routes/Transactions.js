@@ -39,10 +39,35 @@ router.get('/gettransactions', fetchuser , async (req, res) => {
         return res.status(500).json({success:  false, error: 'Internal Server Error'});
     }
 })
+router.get('/getpendingtransactions', fetchuser , async (req, res) => {
+    console.log(req.body);
+    //If an Error is Found, return bad Request
+    //Check whether email exists already
+    try {
+        let user = await User.findById(req.user.id);
+        let results = [];
+        await Promise.all(user.pendingTransactions.map(async (ptr, index) =>{
+            try{
+                let trans = await Transaction.findById(ptr.id);
+                results.push({id: trans._id, name: trans.name ,amount: ptr.amount});
+            } catch(err){
+                console.log(`Cannot split transaction for ${ptr}`)
+                console.log(err.message) 
+                throw(err);
+            }
+        }))
+        
+        return res.status(200).json({success: true, results});
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({success:  false, error: 'Internal Server Error'});
+    }
+})
 
 
 router.post('/splittransaction/:id', fetchuser, async(req, res) => {
     try {
+        console.log(req.body);
         let transactionId = req.params.id;
         let friends = req.body.friends;
         let amounts = req.body.amounts;
@@ -103,7 +128,7 @@ router.post('/paymoney/:id', fetchuser, async(req, res) => {
         let realOwner = await User.findById(creator);
         realOwner = await User.findByIdAndUpdate(creator, {messages: [...realOwner.messages, `${user.name} paid you ${amountToPay}` ]});
         let transaction2 = await Transaction.create({
-            name: `SPLIT TRANSACTION Money paid by (${realOwner.name}) : ` + name,
+            name: `SPLIT TRANSACTION Money paid by (${user.name}) : ` + name,
             description: "TRANSACTION SPLITTED FOR : " + description,
             amount: amountToPay,
             creator: creator,
