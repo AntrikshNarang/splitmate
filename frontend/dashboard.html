@@ -82,7 +82,15 @@
   </div>
 
   <!-- Chart.js -->
-  <canvas class="my-4 w-100" id="myChart" style="width: 80%; max-width: 600px; margin: auto;"></canvas>
+
+  <canvas class="my-4 w-100 myChart" classth="900" height="380"></canvas>
+  <br>
+  <hr>
+  <br>
+  <canvas class="my-4 w-100 myChart" width="900" height="380"></canvas>
+  <br>
+  <hr>
+  <br>
 
   <!-- Recent Transactions (10-15)-->
   <h2 id="activity">Recent Transactions</h2>
@@ -172,7 +180,8 @@
     </div>
   </div>
 </footer>
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form class="modal-content" onsubmit="addExpense(event)">
       <div class="modal-header">
@@ -220,7 +229,7 @@
       <div id="errorDiv" class="text-danger"></div>
       <div class="modal-footer">
         <button type="button" id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit"  class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
       </div>
     </form>
   </div>
@@ -228,12 +237,12 @@
 
 <script>
   let trData = null;
-  function makeError(str){
-            let errorDiv = document.getElementById('errorDiv');
-            errorDiv.innerHTML = null;
-            errorDiv.innerHTML = str;
-        }
-  function setData(data){
+  function makeError(str) {
+    let errorDiv = document.getElementById('errorDiv');
+    errorDiv.innerHTML = null;
+    errorDiv.innerHTML = str;
+  }
+  function setData(data) {
     // Total Expenses
     let income = document.getElementById('income');
     let expense = document.getElementById('expense');
@@ -241,11 +250,11 @@
     let incomeAmount = 0;
     let expenseAmount = 0;
     let totalAmount = 0;
-    for(let i = 0; i < data.length; i++){
-      if(data[i].amount >= 0){
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].amount >= 0) {
         incomeAmount += data[i].amount;
       }
-      else{
+      else {
         expenseAmount += data[i].amount;
       }
     }
@@ -259,31 +268,31 @@
     data.map((tr, index) => {
       let child = document.createElement('tr');
       let num = document.createElement('td');
-      num.textContent=index + 1;
+      num.textContent = index + 1;
       child.appendChild(num);
       let name = document.createElement('td');
-      name.textContent=tr.name;
+      name.textContent = tr.name;
       child.appendChild(name);
       let amount = document.createElement('td');
-      amount.textContent=tr.amount;
+      amount.textContent = tr.amount;
       child.appendChild(amount);
       let type = document.createElement('td');
-      type.textContent=tr.amount >= 0 ? 'Credit':'Expense';
+      type.textContent = tr.amount >= 0 ? 'Credit' : 'Expense';
       child.appendChild(type);
       let category = document.createElement('td');
-      category.textContent=tr.category;
+      category.textContent = tr.category;
       child.appendChild(category);
       let date = document.createElement('td');
-      date.textContent= new Date(tr.date).toLocaleString();
+      date.textContent = new Date(tr.date).toLocaleString();
       child.appendChild(date);
       let split = document.createElement('td');
-      split.textContent= tr.payers.length > 0 ? 'Group' : 'Individual';
+      split.textContent = tr.payers.length > 0 ? 'Group' : 'Individual';
       child.appendChild(split);
       parent.appendChild(child)
     })
   }
-  async function getData(){
-    let response = await fetch("http://localhost:3000/api/money/gettransactions",{
+  async function getData() {
+    let response = await fetch("http://localhost:3000/api/money/gettransactions", {
       method: "GET",
       headers: {
         "content-type": "application-json",
@@ -295,7 +304,7 @@
     trData = result.transactions;
   }
   getData();
-  async function addExpense(e){
+  async function addExpense(e) {
     e.preventDefault();
     let name = document.getElementById('exampleName').value;
     let description = document.getElementById('exampleDescription').value;
@@ -303,24 +312,24 @@
     let category = document.getElementById('exampleCategory').value;
     let expenseType = document.getElementById('expenseRadio').checked ? -1 : 1;
 
-    if(name.length == 0 || description.length == 0 || amount.length == 0 || category == 'Select Category'){
+    if (name.length == 0 || description.length == 0 || amount.length == 0 || category == 'Select Category') {
       makeError("Select All Fields");
       return;
     }
     let result = await fetch("http://localhost:3000/api/money/createtransaction", {
       method: 'POST',
-      headers:{
+      headers: {
         'content-type': 'application/json',
         'auth-Token': localStorage.getItem('token')
       },
-      body: JSON.stringify({name, description, category, amount: amount * expenseType})
+      body: JSON.stringify({ name, description, category, amount: amount * expenseType })
     })
     let data = await result.json();
-    if(data.success == true){
+    if (data.success == true) {
       document.getElementById('closeBtn').click();
       window.location.href = "";
     }
-    else{
+    else {
       makeError(data.error);
     }
   }
