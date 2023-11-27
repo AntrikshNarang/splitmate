@@ -116,7 +116,7 @@
 <script>
   async function getmessages(){
     let parent = document.getElementById('activityDiv')
-    let result = await fetch("http://localhost:3000/api/auth/messages", {
+    let result = await fetch("https://splitmate.onrender.com/api/auth/messages", {
       method: 'GET',
       headers: {
         'content-type': 'application/json',

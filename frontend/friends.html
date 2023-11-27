@@ -145,7 +145,7 @@
             errorDiv.innerHTML = str;
         }
   async function getFriends(){
-    let result = await fetch("http://localhost:3000/api/friends/getfriends", {
+    let result = await fetch("https://splitmate.onrender.com/api/friends/getfriends", {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -165,7 +165,7 @@
     }
   }
   async function acceptRequest(id){
-    let result = await fetch(`http://localhost:3000/api/friends/acceptfriend/${id}`, {
+    let result = await fetch(`https://splitmate.onrender.com/api/friends/acceptfriend/${id}`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -181,7 +181,7 @@
     }
   }
   async function getRequests(){
-    let result = await fetch("http://localhost:3000/api/friends/getfriendrequests", {
+    let result = await fetch("https://splitmate.onrender.com/api/friends/getfriendrequests", {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -219,7 +219,7 @@
       makeError('Enter a Search Value');
       return;
     }
-    let result = await fetch(`http://localhost:3000/api/friends/search/${searchValue}`, {
+    let result = await fetch(`https://splitmate.onrender.com/api/friends/search/${searchValue}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -250,7 +250,7 @@
   }
   async function sendRequest(id){
     console.log(id)
-    let result = await fetch(`http://localhost:3000/api/friends/addFriend/${id}`, {
+    let result = await fetch(`https://splitmate.onrender.com/api/friends/addFriend/${id}`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
